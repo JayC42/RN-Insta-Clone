@@ -12,7 +12,6 @@ import { Loader } from "@/components/Loader";
 import Post from "@/components/Post";
 
 
-
 export default function Index() {
   const { signOut } = useAuth();
   const posts = useQuery(api.posts.getFeedPosts)

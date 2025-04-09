@@ -4,10 +4,36 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import { Image } from "expo-image";
 import { COLORS } from "@/constants/theme";
 import { Ionicons } from "@expo/vector-icons";
+import { Id } from "@/convex/_generated/dataModel";
+import { useState } from "react";
+
+type PostProps = {
+  post:{
+    _id: Id<"posts">;
+    imageUrl: string;
+    caption?: string;
+    likes: number;
+    comments: number;
+    _creationTime: number;  
+    isLiked: boolean;
+    isBookmarked: boolean;
+    author: {
+      _id: string;
+      username: string;
+      image: string;
+    }
+  }
+}
 
 // TODO: add the actual type here
-export default function Post({ post }:{ post:any }) {
-  
+export default function Post({ post }: PostProps) {
+    const [isLiked, setIsLiked] = useState(post.isLiked);
+    const [likesCount, setLikesCount] = useState(post.likes);
+
+    const handleLike = async () => {
+
+    }
+
     return (
     <View style={styles.post}>
     
@@ -49,7 +75,7 @@ export default function Post({ post }:{ post:any }) {
         <View style={styles.postActions}>
             <View style={styles.postActionsLeft}>
                 <TouchableOpacity>
-                    <Ionicons name={"heart-outline"} size={24} color={COLORS.white} />
+                    <Ionicons name={isLiked ? "heart" : "heart-outline"} size={24} color={COLORS.white} />
                 </TouchableOpacity>
                 <TouchableOpacity>
                     <Ionicons name="chatbubble-outline" size={22} color={COLORS.white} />
