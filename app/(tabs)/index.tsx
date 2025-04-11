@@ -1,11 +1,9 @@
-import { FlatList, ScrollView, Text, TouchableOpacity, View, useWindowDimensions } from "react-native";
+import { FlatList, Text, TouchableOpacity, View, useWindowDimensions } from "react-native";
 import { styles } from "../../styles/feed.styles";
-import { Link, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { useAuth } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/theme";
-import Story from "@/components/Story";
-import { STORIES } from "@/constants/mock-data";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Loader } from "@/components/Loader";
@@ -18,6 +16,7 @@ import Animated, {
   withTiming,
   Easing 
 } from "react-native-reanimated";
+import StoriesSection from "@/components/Stories";
 
 export default function Index() {
   const { signOut } = useAuth();
@@ -113,21 +112,6 @@ const HighlightedPost = ({ post, isHighlighted }: { post: any, isHighlighted: bo
     </Animated.View>
   );
 };
-
-{/* STORIES */}
-const StoriesSection = () => {
-  return (
-    <ScrollView
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      style={styles.storiesContainer}
-    >
-      {STORIES.map((story) => (
-        <Story key={story.id} story={story} />
-      ))}
-    </ScrollView> 
-  )
-}
 
 const NoPostsFound = () => {
   return (
