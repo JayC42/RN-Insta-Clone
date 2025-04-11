@@ -8,6 +8,7 @@ import { styles } from '@/styles/profile.styles';
 import { COLORS } from '@/constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
+import { Loader } from '@/components/Loader';
 
 export default function Profile() {
   const { signOut, userId } = useAuth(); 
@@ -23,8 +24,11 @@ export default function Profile() {
   const updateProfile = useMutation(api.users.updateProfile);
 
   const handleSaveProfile = async () => {
-
+    await updateProfile(editedProfile); 
+    setIsEditModalVisible(false);
   };
+
+  if (!currentUser || posts === undefined) return <Loader />
 
   return (
     <View style={styles.container}>
@@ -99,6 +103,7 @@ export default function Profile() {
           )}
         />
       </ScrollView>
+
       {/* EDIT PROFILE MODAL */}
       <Modal
         visible={isEditModalVisible}
@@ -164,21 +169,15 @@ export default function Profile() {
                   <Ionicons name="close-outline" size={24} color={COLORS.white} />
                 </TouchableOpacity>
               </View> 
-            <Image
-              source={selectedPost.imageUrl}
-              cachePolicy={"memory-disk"}
-              style={styles.postDetailImage}
-            />
+              <Image
+                source={selectedPost.imageUrl}
+                cachePolicy={"memory-disk"}
+                style={styles.postDetailImage}
+              />
             </View>
-          )};
+          )}
         </View>
       </Modal>
-
-
-
-
-
-
     </View>
   );
 };
