@@ -1,4 +1,4 @@
-import { FlatList, Text, TouchableOpacity, View, useWindowDimensions } from "react-native";
+import { FlatList, RefreshControl, Text, TouchableOpacity, View, useWindowDimensions } from "react-native";
 import { styles } from "../../styles/feed.styles";
 import { useLocalSearchParams } from "expo-router";
 import { useAuth } from "@clerk/clerk-expo";
@@ -20,7 +20,9 @@ import StoriesSection from "@/components/Stories";
 
 export default function Index() {
   const { signOut } = useAuth();
+  const [refreshing, setRefreshing] = useState(false);
   const posts = useQuery(api.posts.getFeedPosts);
+
   const { highlightedPostId } = useLocalSearchParams();
   const flatListRef = useRef<FlatList>(null);
   const [highlightedPostIndex, setHighlightedPostIndex] = useState<number | null>(null);
@@ -43,7 +45,15 @@ export default function Index() {
 
   if(posts === undefined) return <Loader /> 
   if(posts.length === 0) return NoPostsFound()
-
+  
+  // Todo: implement refresh logic 
+  const onRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  };
+  
   return (
     <View style={styles.container}>
       {/* HEADER */}
@@ -73,6 +83,13 @@ export default function Index() {
           offset: height * 0.7 * index,
           index,
         })}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor={COLORS.primary}
+          />
+      }
       />
     </View>
   );
